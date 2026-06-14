@@ -1,0 +1,118 @@
+============================================================
+ BUILD & INSTALLER NOTES — AhmadRenaldyPOS
+ Ahmad Renaldy — POS System
+============================================================
+
+PREREQUISITES
+─────────────
+• JDK 17+ (Oracle JDK or OpenJDK)
+• JavaFX SDK 17+ (jika menggunakan JDK tanpa JavaFX bundled)
+• MySQL Server 8.0+
+• Apache NetBeans 17+ (IDE)
+• mysql-connector-j-8.x.jar (JDBC Driver)
+
+============================================================
+STEP 1: SETUP DATABASE
+============================================================
+1. Buka MySQL CLI atau phpMyAdmin
+2. Jalankan file sql/renaldypos.sql
+   > mysql -u root -p < sql/renaldypos.sql
+3. Pastikan database "renaldypos" sudah terbuat
+4. Sesuaikan user/password di src/util/DBConnection.java
+
+============================================================
+STEP 2: SETUP PROJECT DI NETBEANS
+============================================================
+1. Buka Apache NetBeans
+2. File → New Project → Java with Ant → Java Application
+3. Nama project: AhmadRenaldyPOS
+4. Copy semua folder src/ ke dalam project
+5. Tambahkan library:
+   - Klik kanan project → Properties → Libraries
+   - Add JAR: mysql-connector-j-8.x.jar
+   - Add Library: JavaFX (jika diperlukan)
+6. Set Main Class: main.MainApp
+7. Pastikan file renaldy.css ada di src/util/
+
+============================================================
+STEP 3: BUILD JAR
+============================================================
+1. Klik kanan project → Clean and Build
+2. File JAR akan ada di folder dist/AhmadRenaldyPOS.jar
+3. Pastikan folder lib/ berisi mysql-connector-j-8.x.jar
+
+============================================================
+STEP 4: MEMBUAT .EXE (WINDOWS)
+============================================================
+Menggunakan Launch4j:
+1. Download Launch4j dari http://launch4j.sourceforge.net/
+2. Konfigurasi:
+   - Output file: AhmadRenaldyPOS.exe
+   - Jar: dist/AhmadRenaldyPOS.jar
+   - Icon: icon/pos-icon.ico (custom icon)
+   - Min JRE version: 17
+   - JRE search: Registry, Java home dir, PATH
+3. Build wrapper
+
+============================================================
+STEP 5: MEMBUAT INSTALLER (WINDOWS)
+============================================================
+Menggunakan Inno Setup:
+
+--- CONTOH SCRIPT INNO SETUP ---
+[Setup]
+AppName=AhmadRenaldyPOS
+AppVersion=1.0.0
+DefaultDirName={autopf}\AhmadRenaldyPOS
+DefaultGroupName=AhmadRenaldyPOS
+OutputDir=output
+OutputBaseFilename=AhmadRenaldyPOS-Setup
+Compression=lzma
+SolidCompression=yes
+SetupIconFile=icon\pos-icon.ico
+
+[Files]
+Source: "dist\AhmadRenaldyPOS.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "dist\lib\*"; DestDir: "{app}\lib"; Flags: ignoreversion recursesubdirs
+Source: "sql\renaldypos.sql"; DestDir: "{app}\sql"; Flags: ignoreversion
+
+[Icons]
+Name: "{group}\AhmadRenaldyPOS"; Filename: "{app}\AhmadRenaldyPOS.exe"
+Name: "{commondesktop}\AhmadRenaldyPOS"; Filename: "{app}\AhmadRenaldyPOS.exe"
+
+[Run]
+Filename: "{app}\AhmadRenaldyPOS.exe"; Description: "Launch AhmadRenaldyPOS"; Flags: nowait postinstall skipifsilent
+--- END SCRIPT ---
+
+============================================================
+STEP 6: DISTRIBUSI
+============================================================
+1. File installer: AhmadRenaldyPOS-Setup.exe
+2. User menjalankan installer
+3. User harus install MySQL Server terpisah
+4. Jalankan sql/renaldypos.sql untuk setup database
+5. Jalankan aplikasi dari shortcut
+
+============================================================
+CATATAN PENTING
+============================================================
+• Pastikan MySQL Server berjalan sebelum membuka aplikasi
+• Default connection: localhost:3306, user=root, password=""
+• Ubah konfigurasi di DBConnection.java jika berbeda
+• Minimum resolusi layar: 1024x640
+• Direkomendasikan: 1280x760 atau lebih besar
+
+============================================================
+TEKNOLOGI YANG DIGUNAKAN
+============================================================
+• Java 17 (JavaFX)
+• MySQL 8.0
+• mysql-connector-j-8.x
+• Apache NetBeans (IDE)
+• CSS Custom (renaldy.css)
+
+============================================================
+DEVELOPER
+============================================================
+Ahmad Renaldy
+© 2025 — All Rights Reserved
